@@ -3,12 +3,15 @@ flasky = 260;
 
 let creaturex = 0;
 let creaturey = 0;
-let leglength = 3;
+let leglength = 0.2;
 let creaturecolor;
 let circlexposition = 0;
 let circleyposition = 0;
 let speedx = 0.3;
 let speedy = 2;
+
+let magnification = 3; // Adjust magnification factor as needed
+let magnifiedwidth, magnifiedheight;
 
 function setup() {
   let cnv = createCanvas(800, 500);
@@ -26,7 +29,7 @@ function draw() {
   let angleRad = radians(angle);
 
   //flasks
-  flask1 = drawflask(flaskx, flasky, "rgb(198,247,247)", "B");
+  flask1 = drawflask(flaskx, flasky, "rgb(9,80,170)", "B");
   flask2 = drawflask(flaskx - 10, flasky - 200, "rgb(141,1,1)", "R");
   flask3 = drawflask(flaskx - 60, flasky - 100, "#A09D9D", "G");
   flask4 = drawflask(flaskx - 90, flasky - 250, "rgb(245,245,191)", "Y");
@@ -43,18 +46,18 @@ function draw() {
   // Check if the "b" key is pressed
   if (keyIsPressed && key === "b") {
     //creaturecolor is blue
-    creaturecolor = color("rgb(198,247,247)");
+    creaturecolor = color("rgb(9,80,170)");
   } else if (keyIsPressed && key === "r") {
     //  creaturecolor is red
     creaturecolor = color("rgb(141,1,1)");
   } else if (keyIsPressed && key === "g") {
-    //  creaturecolor is red
+    //  creaturecolor is grey
     creaturecolor = color("#A09D9D");
   } else if (keyIsPressed && key === "y") {
     //  creaturecolor is yellow
     creaturecolor = color("rgb(245,245,191)");
   } else if (keyIsPressed && key === "w") {
-    //  creaturecolor is yellow
+    //  creaturecolor is white
     creaturecolor = color("rgb(241,241,235)");
   } else {
     // Randomize creature color
@@ -97,45 +100,7 @@ function draw() {
     pop();
   }
 
-  //microscope
-  fill(50); //
-  rect(90, 300, 160, 20);
-
-  fill(100); // Light gray color
-  rect(150, 60, 20, 150);
-
-  fill(100); //
-  rect(150, 200, 40, 100);
-
-  fill(100); //
-  rect(135, 320, 80, 20);
-
-  push();
-  fill(0);
-  translate(150, -80);
-  rotate(angleRad);
-  rect(30, 80, 110, 40);
-
-  fill(0);
-  circle(190, 100, 150);
-  fill(1, 70, 107);
-  noStroke();
-  rect(180, 35, 90, 155);
-
-  fill(0);
-  rect(130, 90, 100, 30);
-
-  rotate(angleRad) + 10;
-  fill(0);
-  rect(180, 30, 100, 30);
-
-  rotate(angleRad + 30);
-  fill(0);
-  rect(110, 92, 90, 30);
-
-  pop();
-
-  // Circle position
+    // Circle position
   push();
   translate(width / 2, height / 2);
   fill(255, 255, 255, 80);
@@ -144,14 +109,26 @@ function draw() {
   circle(circlexposition, circleyposition, 300);
   pop();
 
+  
+  //lamp
+  fill(50); //
+  rect(90, 300, 160, 20);
+  fill(100); // Light gray color
+  rect(150, 60, 20, 150);
+  fill(100); //
+  rect(150, 200, 40, 100);
+  fill(100); //
+  rect(135, 320, 80, 20);
   push();
-  stroke(0);
-  strokeWeight(10);
-  line(mouseX, mouseY, mouseX + 150, mouseY + 5);
+  fill(0);
+  translate(150, -80);
+  rotate(angleRad);
+  rect(30, 80, 110, 40);
+  fill("rgb(236,236,192)");
+  circle(210, 100, 100);
   pop();
 
   function drawCreature(creaturex, creaturey) {
-    // Generate random color for creature
     push();
     translate(width / 2, height / 2);
 
@@ -163,11 +140,7 @@ function draw() {
       mouseY - height / 2
     );
 
-    if (distance < 10) {
-      creaturecolor = color("rgb(198,247,247)"); // Change to yellow
-    }
-
-    // Draw the creature
+//creature
     for (let i = 0; i < 80; i++) {
       stroke(creaturecolor);
       line(
@@ -179,12 +152,35 @@ function draw() {
     }
     pop();
   }
-  fill(255);
-  text("Try out different chemicals on the creature", 30, 400);
-  text(
-    "Click on the creature to see which chemical will help it grow",
-    30,
-    420
+
+  push();
+  translate(30, -160);
+  triangle(230, 350, 170, 220, 320, 220);
+  pop();
+
+  //magnifying glass
+  magnifiedwidth = 100; //size
+  magnifiedheight = 100; //size
+  let magnifiedX = mouseX - magnifiedwidth / 2;
+  let magnifiedY = mouseY - magnifiedheight / 2;
+  let magnifiedArea = get(
+    magnifiedX,
+    magnifiedY,
+    magnifiedwidth,
+    magnifiedheight
   );
-  text("Dont over feed it!", 30, 440);
+  //magnified area
+  push();
+  translate(mouseX, mouseY);
+  scale(magnification);
+  image(magnifiedArea, -magnifiedwidth / 2, -magnifiedheight / 2); //place mouse in the center
+  pop();
+
+  //text
+  fill(255);
+    textFont("Courier New");
+  text("Find the floating bacteria", 30, 390);
+  text("Test out different chemicals", 30, 410);
+  text("Press the bacteria to see which chemical will help it grow", 30, 430);
+  text("Don't over feed it!", 30, 450);
 }
